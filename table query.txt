@@ -1,0 +1,131 @@
+=============SUCCESS FIRST TABLES==============
+
+
+--------------------candidate table----------------------
+
+
+CREATE TABLE  "CANDIDATE" 
+   (	"CID" VARCHAR2(20) NOT NULL ENABLE, 
+	"NAME" VARCHAR2(20) NOT NULL ENABLE, 
+	"EMAIL" VARCHAR2(20) NOT NULL ENABLE, 
+	"ADDRESS" VARCHAR2(20) NOT NULL ENABLE, 
+	"PHONE_NO" NUMBER NOT NULL ENABLE, 
+	"PASSWORD" VARCHAR2(20) NOT NULL ENABLE, 
+	"DOB" DATE NOT NULL ENABLE, 
+	"SSC_PER" FLOAT(1) NOT NULL ENABLE, 
+	"SSC_YOP" NUMBER NOT NULL ENABLE, 
+	"SSC_BOARD" VARCHAR2(10) NOT NULL ENABLE, 
+	"HSC_PER" FLOAT(1) NOT NULL ENABLE, 
+	"HSC_YOP" NUMBER NOT NULL ENABLE, 
+	"HSC_BOARD" VARCHAR2(10) NOT NULL ENABLE, 
+	"HSC_STREAM" VARCHAR2(10), 
+	"PG_PER" FLOAT(1), 
+	"PG_YOP" NUMBER, 
+	"PG_STREAM" VARCHAR2(10), 
+	"UG_PER" FLOAT(1) NOT NULL ENABLE, 
+	"UG_YOP" NUMBER NOT NULL ENABLE, 
+	"UG_STREAM" VARCHAR2(10) NOT NULL ENABLE, 
+	"CONFIRM_PASSWORD" VARCHAR2(20) NOT NULL ENABLE, 
+	"UPLOAD_RESUME" CLOB NOT NULL ENABLE, 
+	"UPLOAD_PHOTO" BLOB, 
+	 CONSTRAINT "CANDIDATE_PK" PRIMARY KEY ("CID") ENABLE
+   ) ;
+ 
+ ----------company_general_details table----------------------------
+
+
+CREATE TABLE  "COMPANY_GEN_DETAILS" 
+   (	"CMID" VARCHAR2(15) NOT NULL ENABLE, 
+	"NAME" VARCHAR2(20) NOT NULL ENABLE, 
+	"ADDRESS" VARCHAR2(20) NOT NULL ENABLE, 
+	"DESCRIPTION" VARCHAR2(25) NOT NULL ENABLE, 
+	"EMAIL" VARCHAR2(20) NOT NULL ENABLE, 
+	"PASSWORD" VARCHAR2(20) NOT NULL ENABLE, 
+	"PHONE_NO" NUMBER(10,0) NOT NULL ENABLE, 
+	 CONSTRAINT "COMPANY_GEN_DETAILS_PK" PRIMARY KEY ("CMID") ENABLE
+   ) ;
+-----------host_jobs table-------------------------
+
+
+CREATE TABLE  "HOST_JOBS" 
+   (	"CMID" VARCHAR2(15) NOT NULL ENABLE, 
+	"NAME" VARCHAR2(20) NOT NULL ENABLE, 
+	"JOB_PROFILE" VARCHAR2(20) NOT NULL ENABLE, 
+	"LOCATION" VARCHAR2(20), 
+	"PACKAGE" FLOAT(126), 
+	"OPENINGS" NUMBER, 
+	"EXPERIENCE" FLOAT(126), 
+	"NOTICE_PERIOD" FLOAT(126), 
+	"DESCRIPTION" VARCHAR2(25) NOT NULL ENABLE, 
+	"PERCENTAGE" FLOAT(126) NOT NULL ENABLE, 
+	 CONSTRAINT "COMPANY_REQ_PK" PRIMARY KEY ("NAME") ENABLE
+   ) ;
+ ALTER TABLE  "HOST_JOBS" ADD CONSTRAINT "COMPANY_REQ_FK" FOREIGN KEY ("CMID")
+	  REFERENCES  "COMPANY_GEN_DETAILS" ("CMID") ENABLE;
+
+----------skills table----------------------------------------------
+
+
+CREATE TABLE  "SKILLS" 
+   (	"CID" VARCHAR2(20) NOT NULL ENABLE, 
+	"SKILL1" VARCHAR2(20), 
+	"SKILL2" VARCHAR2(20), 
+	"SKILL3" VARCHAR2(20), 
+	"SKILL4" VARCHAR2(20), 
+	"SKILL5" VARCHAR2(20), 
+	"CSEQ" NUMBER(20,0) NOT NULL ENABLE, 
+	 CONSTRAINT "SKILLS_PK" PRIMARY KEY ("CSEQ") ENABLE
+   ) ;
+
+ ALTER TABLE  "SKILLS" ADD CONSTRAINT "SKILLS_FK" FOREIGN KEY ("CID")
+	  REFERENCES  "CANDIDATE" ("CID") ENABLE;
+==================PROCEDURE================================
+-----------------candidate table procedure----------------
+create or replace procedure "CANDIDATE_PROCEDURE"
+(cid OUT VARCHAR2,
+name IN VARCHAR2,
+email IN VARCHAR2,
+address IN VARCHAR2,
+phone_no IN NUMBER,
+password IN VARCHAR2,
+dob IN DATE,
+ssc_per IN NUMBER,
+ssc_yop IN NUMBER,
+ssc_board IN VARCHAR2,
+hsc_per IN NUMBER,
+hsc_yop IN NUMBER,
+hsc_board IN VARCHAR2,
+hsc_stream IN VARCHAR2,
+pg_per IN NUMBER,
+pg_yop IN NUMBER,
+pg_stream IN VARCHAR2,
+confirm_password IN VARCHAR2,
+ug_per IN NUMBER,
+ug_yop IN NUMBER,
+ug_stream IN VARCHAR2)
+is
+begin
+
+select 'can'||candidate_seq.nextval into cid from dual;
+insert into candidate(cid,name,email,address,phone_no,password,dob,ssc_per,ssc_yop,ssc_board,hsc_per,hsc_yop,hsc_stream,pg_per,pg_yop,pg_stream,confirm_password,ug_per,ug_yop,ug_stream) values (cid,name,email,address,phone_no,password,dob,ssc_per,ssc_yop,ssc_board,hsc_per,hsc_yop,hsc_stream,pg_per,pg_yop,pg_stream,confirm_password,ug_per,ug_yop,ug_stream);
+dbms_output.put_line(cid);     
+
+
+==================PROCEDURE================================
+-----------------company table procedure----------------
+
+create or replace procedure "COMPANY_GEN_DETAILS_PROCEDURE"
+(cmid OUT VARCHAR2,
+name IN VARCHAR2,
+address IN VARCHAR2,
+description IN VARCHAR2,
+email IN VARCHAR2,
+password IN VARCHAR2,
+phone_no IN NUMBER)
+is
+begin
+select 'com'||company_gen_details_seq.nextval into cmid from dual;
+insert into company_gen_details(cmid,name,address,description,email,password,phone_no) values (cmid,name,address,description,email,password,phone_no);
+dbms_output.put_line(cmid);                   
+
+end;
